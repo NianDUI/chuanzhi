@@ -1,0 +1,77 @@
+优先级(从上往下，优先级越来越低)
+	jvm参数
+		-Ddubbo.protocol.port=20880
+	application.properties(等同于provider.xml)
+		protocol.port=20881
+	dubbo.properties	相当于公共的配置
+		protocol.port=20881
+
+
+属性配置
+如果你的应用足够简单，例如，不需要多注册中心或多协议，并且需要在spring容器中共享配置，那么，我们可以直接使用 dubbo.properties作为默认配置。
+
+Dubbo可以自动加载classpath根目录下的dubbo.properties，但是你同样可以使用JVM参数来指定路径：-Ddubbo.properties.file=xxx.properties。
+
+映射规则
+可以将xml的tag名和属性名组合起来，用‘.’分隔。每行一个属性。
+
+dubbo.application.name=foo 相当于 <dubbo:application name="foo" />
+dubbo.registry.address=10.20.153.10:9090 相当于 <dubbo:registry address="10.20.153.10:9090" />
+如果在xml配置中有超过一个的tag，那么你可以使用‘id’进行区分。如果你不指定id，它将作用于所有tag。
+
+dubbo.protocol.rmi.port=1099 相当于 <dubbo:protocol id="rmi" name="rmi" port="1099" />
+dubbo.registry.china.address=10.20.153.10:9090 相当于 <dubbo:registry id="china" address="10.20.153.10:9090" />
+如下，是一个典型的dubbo.properties配置样例。
+
+dubbo.application.name=foo
+dubbo.application.owner=bar
+dubbo.registry.address=10.20.153.10:9090
+重写与优先级
+properties-override
+
+优先级从高到低：
+
+JVM -D参数，当你部署或者启动应用时，它可以轻易地重写配置，比如，改变buddo协议端口；
+XML, XML中的当前配置会重写dubbo.properties中的；
+Properties，默认配置，仅仅作用于以上两者没有配置时。
+1：如果在classpath下有超过一个dubbo.properties文件，比如，两个jar包都各自包含了dubbo.properties，dubbo将随机选择一个加载，并且打印错误日志。
+
+2：如果 id没有在protocol中配置，将使用name作为默认属性。
+
+
+
+示例--------------------1
+启动时检查
+Dubbo 缺省会在启动时检查依赖的服务是否可用，不可用时会抛出异常，阻止 Spring 初始化完成，以便上线时，能及早发现问题，默认 check="true"。
+
+可以通过 check="false" 关闭检查，比如，测试时，有些服务不关心，或者出现了循环依赖，必须有一方先启动。
+
+另外，如果你的 Spring 容器是懒加载的，或者通过 API 编程延迟引用服务，请关闭 check，否则服务临时不可用时，会抛出异常，拿到 null 引用，如果 check="false"，总是会返回引用，当服务恢复时，能自动连上。
+
+示例
+通过 spring 配置文件
+关闭某个服务的启动时检查 (没有提供者时报错)：
+
+<dubbo:reference interface="com.foo.BarService" check="false" />
+关闭所有服务的启动时检查 (没有提供者时报错)：
+
+<dubbo:consumer check="false" />
+关闭注册中心启动时检查 (注册订阅失败时报错)：
+
+<dubbo:registry check="false" />
+通过 dubbo.properties
+dubbo.reference.com.foo.BarService.check=false
+dubbo.reference.check=false
+dubbo.consumer.check=false
+dubbo.registry.check=false
+通过 -D 参数
+java -Ddubbo.reference.com.foo.BarService.check=false
+java -Ddubbo.reference.check=false
+java -Ddubbo.consumer.check=false 
+java -Ddubbo.registry.check=false
+配置的含义
+dubbo.reference.check=false，强制改变所有 reference 的 check 值，就算配置中有声明，也会被覆盖。
+
+dubbo.consumer.check=false，是设置 check 的缺省值，如果配置中有显式的声明，如：<dubbo:reference check="true"/>，不会受影响。
+
+dubbo.registry.check=false，前面两个都是指订阅成功，但提供者列表是否为空是否报错，如果注册订阅失败时，也允许启动，需使用此选项，将在后台定时重试。

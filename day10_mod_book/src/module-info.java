@@ -1,0 +1,3 @@
+module book {
+	exports book;
+}

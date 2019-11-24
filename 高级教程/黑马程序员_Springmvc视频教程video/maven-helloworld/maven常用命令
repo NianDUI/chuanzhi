@@ -1,0 +1,91 @@
+1.clean:清理，命令class
+	cmd 项目目录 :mvn clean,删除target目录
+	
+2.:compile:编译
+	cmd 项目目录 :mvn compile,生成class文件
+
+3.test:单元测试
+	cmd 项目目录 :mvn test,执行src/test中的java测试类。
+	有进行编译，都会执行
+	单元测试的类名有要求XxxTest.java
+	
+4.package:打包
+	cmd 项目目录 :mvn package,
+	编译—》测试-》打包，打包到根目录下的target
+	web project war包
+	java project jar包
+	
+5.install:安装，解决本地多个项目共用一个jar包	
+	cmd 项目目录 :mvn install,
+	本地多个项目公用一个jar包
+	编译—》测试-》打包-》安装，安装到本地仓库的路径
+
+6.maven项目生命周期
+	在maven中存在三套生命周期，每一套生命周期都是项目独立的，互不影响
+	在一套生命周期内，执行后面的命令前面操作会自动执行。
+	
+	CleanLifeCycle:清理的生命周期
+		clean
+	defaultLifeCycle:默认生命周期
+		compile，test，package，install，deploy
+	siteLifeCycle:站点生命周期
+		site
+
+
+新建项目
+1.通过工具生成web.xml文件，项目右键-Java EE Tools-Generate D...
+
+2.插入工具》jdk1.8
+	pom.xml文件中右键-Maven-Add Plugin-搜索compile-选择版本
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>3.3</version>
+  			<!-- 设置详细的信息 -->
+  			<configuration>
+  				<source>1.8</source>
+  				<target>1.8</target>
+  				<encoding>utf-8</encoding>
+  			</configuration>
+  		</plugin>
+  	</plugins>
+  </build>
+  
+3.struts2添加依赖
+	pom.xml文件中选择-Dependenciens-左边add
+		<dependencies>
+		
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-core</artifactId>
+			<version>2.3.24</version>
+		</dependency>
+		
+	</dependencies>
+	
+4.创建struts.xml
+
+5.创建Action类
+
+6.在web.xml中配置struts框架核心过滤器
+	<!-- 配置struts框架核心过滤器 -->
+	<filter>
+		<filter-name>struts</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>struts</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+7.
+
+运行：项目右键-run as -maven build...-Goals:tomact:run
+
+cmd 项目目录 ：mvn tomcat:run，运行maven项目
+ 	
+  
+	
+	

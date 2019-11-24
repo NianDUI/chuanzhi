@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>漫画</title>
+</head>
+<body>
+	<div align="center">
+		地址：<textarea rows="3" cols="40" class="href"></textarea>
+	    &nbsp;&nbsp;<input type="button" class="btn" value="打开"/>
+	</div>
+    
+    <div class="contion" align="center"></div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+    $(".btn").click(function() {
+    	console.log("btn");
+        var href = $(".href").val()
+    	console.log(href);
+        if (href.length > 0) {
+        	request(href);
+        }
+    });
+    
+   	function next(ele) {
+        var href = $(ele).attr("href");
+        if (href.length > 0) {
+        	request(href);
+        }
+   	}
+    
+   	function request(href) {
+        $(".contion").html("<img src='http://hbimg.b0.upaiyun.com/8ed6293156c45e9d244e6f83a3083053aee078ff4c3f-XXWGSd_fw658'/>");
+        $.ajax({
+            url : "Manhua36Wang",
+            type : "post",
+            data : {
+                href : href
+            },
+            success : function(data) {
+            	console.log(data);
+            	var data = data.split(",");
+            	console.log(data);
+                if (data.length > 0) {
+                    var str = "";
+                    for (var i = 0; i < data.length; i++) {
+                    	if (i != data.length - 1) {
+                            str += "<img src='" + data[i] + "'/><br/>";
+                    	} else {
+                            str += '<br/><input type="button" value="下一章" href="' + data[i] + '" onClick="next(this);"/>';
+                            $(".href").val(data[i]);
+                    	}
+                    }
+                    $(".contion").html(str);
+                }
+            }
+        });
+   	}
+            
+    </script>
+</body>
+</html>

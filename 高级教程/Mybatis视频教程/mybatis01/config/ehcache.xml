@@ -1,0 +1,16 @@
+<ehcache xmlnx:xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsixsi:noNamespaceSchemaLocation="../config/ehcache.xsd">
+	<!-- 数据存到磁盘存到哪里 -->
+	<diskStore path="F:\编程练习\ehcache" />
+	<defaultCache
+		maxElementsInMemory="1000"
+		maxElementsOnDisk="10000000"
+		eternal="false"
+		overflowToDisk="false"
+		timeToIdleSeconds="120"
+		timeToLiveSeconds="120"
+		diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU">
+	</defaultCache>
+	
+</ehcache>

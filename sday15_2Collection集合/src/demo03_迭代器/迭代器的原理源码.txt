@@ -1,0 +1,39 @@
+public interface Iterator<T> {
+	boolean hasNext(); // 接口默认有public abstract 
+	Object next(); // 接口默认有public abstract 
+}
+
+public interface Iterable<T> {
+    Iterator<T> iterator(); // 接口默认有public abstract 
+}
+
+
+public interface Collection<E> extends Iterable<E> {
+    Iterator<E> iterator(); // 继承的
+}
+
+public interface List<E> extends Collection<E> {
+    Iterator<E> iterator(); // 继承的
+}
+
+public class ArrayList<E> implements List<E>{
+    public Iterator<E> iterator() { // 实现
+        return new Itr();
+    }
+    
+    private class Itr implements Iterator<E> {
+		public boolean hasNext(){}
+		public Object next(){}
+    }
+}
+
+
+Collection c = new ArrayList();
+c.add("hello");
+c.add("world");
+c.add("java");
+Iterator it = c.iterator(); 
+while (it.hasNext()) {
+	String s = (String) it.next();
+	System.out.println(s);
+}

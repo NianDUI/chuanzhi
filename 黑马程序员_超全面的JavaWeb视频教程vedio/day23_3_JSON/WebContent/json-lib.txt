@@ -1,0 +1,11 @@
+是什么？
+	他可以把javabean转换成json串
+jar包
+	略
+核心类
+	JSONObject --> Map
+	> toString();
+	> JSONObject map2 = JSONObject.fromObject(p); 把对象转换成JSONObject对象
+	JSONArray --> List
+	> toString();
+	> JSONArray jsonArray = JSONArray.fromObject(list); 把list转换成JSONArray对象

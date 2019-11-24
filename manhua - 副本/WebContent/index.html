@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>漫画</title>
+</head>
+<body>
+    <input type="text" class="href"/>&nbsp;&nbsp;<input type="button" class="btn" value="打开"/>
+
+    <div class="contion"></div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(function() {
+            $(".btn").click(function() {
+                var href = $(".href").val();
+                if (href.length > 0) {
+                    $.ajax({
+                        url : "Manhua36Wang",
+                        type : "post",
+                        data : {
+                            href : href
+                        },
+                        dataType : "json",
+                        success : function(data) {
+                            if (data.length > 0) {
+                                var str = "";
+                                for (var i = 0; i < data.length; i++) {
+                                    str += "<img src='" + data[i] + "'/><br/>"
+                                }
+                                $(".contion").html(str);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

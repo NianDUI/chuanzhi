@@ -1,0 +1,89 @@
+interface Collection {
+
+}
+
+interface Set extends Collection {
+
+}
+
+Class HashSet implements Set {
+	private static final Object PRESENT = new Object();
+	private transient HashMap<E,Object> map;
+	
+	public HashSet() {
+        map = new HashMap<>();
+	}
+	
+    public boolean add(E e) { // e=hello
+        return map.put(e, PRESENT)==null;
+    }
+
+}
+
+class HashMap implements Map {
+    public V put(K key, V value) { // k=key=e=hello
+        // 看哈希表是否为空,如果空,给我开辟空间。
+        
+        // 判断对象是否为空。key
+        
+        // hash 和对象的hashCode()方法相关
+        
+        // 在哈希表中查找hash的值。
+        	// 判hash值是否存在。
+        		// 存在：返回
+        // 添加元素：返回
+        
+        return putVal(hash(key), key, value, false, true);
+    }
+    
+    static final int hash(Object key) { // key=e=hello
+        int h; // 0
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+    }
+    
+    
+    final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                   boolean evict) {
+        Node<K,V>[] tab; Node<K,V> p; int n, i;
+        if ((tab = table) == null || (n = tab.length) == 0)
+            n = (tab = resize()).length;
+        if ((p = tab[i = (n - 1) & hash]) == null)
+            tab[i] = newNode(hash, key, value, null);
+        else {
+            Node<K,V> e; K k;
+            if (p.hash == hash &&
+                ((k = p.key) == key || (key != null && key.equals(k))))
+                e = p;
+            else if (p instanceof TreeNode)
+                e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+            else {
+                for (int binCount = 0; ; ++binCount) {
+                    if ((e = p.next) == null) {
+                        p.next = newNode(hash, key, value, null);
+                        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                            treeifyBin(tab, hash);
+                        break;
+                    }
+                    if (e.hash == hash &&
+                        ((k = e.key) == key || (key != null && key.equals(k))))
+                        break;
+                    p = e;
+                }
+            }
+            if (e != null) { // existing mapping for key
+                V oldValue = e.value;
+                if (!onlyIfAbsent || oldValue == null)
+                    e.value = value;
+                afterNodeAccess(e);
+                return oldValue;
+                // 走这里没有添加元素
+            }
+        }
+        ++modCount;
+        if (++size > threshold)
+            resize();
+        afterNodeInsertion(evict);
+        return null;
+    }
+
+}
